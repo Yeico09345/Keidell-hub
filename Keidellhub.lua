@@ -1,5 +1,3 @@
--- Cargar el script de Chili Hub
-loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua"))()
 
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -70,4 +68,40 @@ button2.Parent = frame
 
 -- Round corners for button 2
 local btnCorner2 = Instance.new("UICorner")
-btn
+btnCorner2.CornerRadius = UDim.new(0, 10)
+btnCorner2.Parent = button2
+
+-- Button 3: Speed Boost
+local button3 = Instance.new("TextButton")
+button3.Size = UDim2.new(0, 200, 0, 40)
+button3.Position = UDim2.new(0.5, -100, 0.8, 0)
+button3.BackgroundColor3 = Color3.fromRGB(0, 140, 255)
+button3.Text = "Speed Boost"
+button3.Font = Enum.Font.GothamBold
+button3.TextSize = 16
+button3.TextColor3 = Color3.fromRGB(255, 255, 255)
+button3.Parent = frame
+
+-- Round corners for button 3
+local btnCorner3 = Instance.new("UICorner")
+btnCorner3.CornerRadius = UDim.new(0, 10)
+btnCorner3.Parent = button3
+
+-- Button Click Events
+button1.MouseButton1Click:Connect(function()
+    -- Activar Auto Farm
+    print("Auto Farm activado")
+    -- Aquí puedes agregar la lógica para el Auto Farm
+end)
+
+button2.MouseButton1Click:Connect(function()
+    -- Activar ESP
+    print("ESP activado")
+    -- Aquí puedes agregar la lógica para el ESP
+end)
+
+button3.MouseButton1Click:Connect(function()
+    -- Activar Speed Boost
+    print("Speed Boost activado")
+    -- Aquí puedes agregar la lógica para el Speed Boost
+end)
