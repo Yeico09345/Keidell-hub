@@ -5,7 +5,7 @@ local camera = workspace.CurrentCamera
 
 local library = Instance.new("ScreenGui")
 library.Name = "KeidellHub"
-library.Parent = gethui and gethui() or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+library.Parent = (gethui and gethui()) or game:GetService("CoreGui")
 
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 300, 0, 200)
