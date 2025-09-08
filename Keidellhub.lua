@@ -1,4 +1,4 @@
--- Keidell Hub - Chilli Style UI y Funciones (FUNCIONAL)
+-- Keidell Hub - UI y Funciones (FUNCIONAL)
 
 local player = game.Players.LocalPlayer
 
@@ -38,7 +38,7 @@ spawn(function()
     end
 end)
 
--- Frame principal (más compacto y colorido)
+-- Frame principal
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 340, 0, 420)
 frame.Position = UDim2.new(0.5, -170, 0.5, -210)
@@ -73,7 +73,7 @@ local subtitle = Instance.new("TextLabel", frame)
 subtitle.Size = UDim2.new(1, -80, 0, 20)
 subtitle.Position = UDim2.new(0, 75, 0, 50)
 subtitle.BackgroundTransparency = 1
-subtitle.Text = "Chilli Style"
+subtitle.Text = "Keidell Style"
 subtitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 subtitle.Font = Enum.Font.Gotham
 subtitle.TextSize = 16
@@ -115,11 +115,46 @@ end)
 -- TP base
 local function teleport_base()
     local myTeam = player.Team
+    local found = false
+    -- 1. Buscar base por equipo
     for _, v in pairs(workspace:GetChildren()) do
-        if v.Name == "Base" and v:FindFirstChild("Team") and v.Team.Value == myTeam then
+        if v.Name == "Base" and v:FindFirstChild("Team") and v.Team.Value == myTeam and myTeam ~= nil then
             if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 player.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0,5,0)
-                output.Text = "Teletransportado a tu base."
+                output.Text = "Teletransportado a tu base (por equipo)."
+                found = true
+                return
+            end
+        end
+    end
+    -- 2. Buscar base por propietario (si existe esa propiedad)
+    if not found then
+        for _, v in pairs(workspace:GetChildren()) do
+            if v.Name == "Base" and v:FindFirstChild("Owner") and v.Owner.Value == player.Name then
+                player.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0,5,0)
+                output.Text = "Teletransportado a tu base (por propietario)."
+                found = true
+                return
+            end
+        end
+    end
+    -- 3. Llevarte a la base más cercana
+    if not found then
+        local closest, dist = nil, math.huge
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local pos = player.Character.HumanoidRootPart.Position
+            for _, v in pairs(workspace:GetChildren()) do
+                if v.Name == "Base" and v:IsA("BasePart") then
+                    local d = (v.Position - pos).Magnitude
+                    if d < dist then
+                        closest = v
+                        dist = d
+                    end
+                end
+            end
+            if closest then
+                player.Character.HumanoidRootPart.CFrame = closest.CFrame + Vector3.new(0,5,0)
+                output.Text = "Teletransportado a la base más cercana."
                 return
             end
         end
@@ -161,6 +196,37 @@ local function updateAutoStealButton()
     autoStealBtn.BackgroundColor3 = autoSteal and Color3.fromRGB(80, 255, 80) or Color3.fromRGB(120, 60, 80)
 end
 
+local function auto_steal_brainroot()
+    while autoSteal do
+        for _, v in pairs(game.Players:GetPlayers()) do
+            if v ~= player and v.Character and v.Character:FindFirstChild("Brainroot") then
+                local brainroot = v.Character.Brainroot
+                if not player.Character:FindFirstChild("Brainroot") then
+                    brainroot.Parent = player.Character
+                    output.Text = "Robado brainroot de: " .. v.Name
+                end
+            end
+        end
+        wait(0.2)
+    end
+end
+
+local y = 120
+local function makeButton(text, color, callback)
+    local btn = Instance.new("TextButton", frame)
+    btn.Size = UDim2.new(0, 310, 0, 34)
+    btn.Position = UDim2.new(0, 15, 0, y)
+    btn.BackgroundColor3 = color
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 16
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
+    btn.MouseButton1Click:Connect(callback)
+    y = y + 40
+    return btn
+end
+
 autoStealBtn = makeButton("Auto Steal Brainroot [OFF]", Color3.fromRGB(120, 60, 80), function()
     autoSteal = not autoSteal
     updateAutoStealButton()
@@ -169,7 +235,6 @@ autoStealBtn = makeButton("Auto Steal Brainroot [OFF]", Color3.fromRGB(120, 60, 
     end
 end)
 
--- Botones
 makeButton("TP a tu base", Color3.fromRGB(60, 120, 80), teleport_base)
 makeButton("TP a Brainroot", Color3.fromRGB(80, 80, 120), teleport_brainroot)
 
