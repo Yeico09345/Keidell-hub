@@ -18,12 +18,24 @@ local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 12)
 corner.Parent = frame
 
+-- Title Label
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -20, 0, 40)
+title.Position = UDim2.new(0, 10, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "🔒 Unlock Lorem Script"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextXAlignment = Enum.TextXAlignment.Center
+title.Parent = frame
+
 -- Button
 local button = Instance.new("TextButton")
 button.Size = UDim2.new(0, 200, 0, 45)
 button.Position = UDim2.new(0.5, -100, 0.4, 0)
 button.BackgroundColor3 = Color3.fromRGB(0, 140, 255) -- blue by default
-button.Text = "Buy to Unlock"
+button.Text = "Buy  dance"
 button.Font = Enum.Font.GothamBold
 button.TextSize = 18
 button.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -45,3 +57,16 @@ errorLabel.TextSize = 14
 errorLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- red
 errorLabel.TextXAlignment = Enum.TextXAlignment.Center
 errorLabel.Parent = frame
+
+-- Button Click Event
+button.MouseButton1Click:Connect(function()
+    -- Copy link to clipboard
+    setclipboard("https://www.roblox.com/game-pass/1427391312/Unlock-Script")
+    
+    -- Change button appearance
+    button.BackgroundColor3 = Color3.fromRGB(0, 200, 0) -- green
+    button.Text = "Link Copied 🔑"
+    
+    -- Show red error
+    errorLabel.Text = "You don’t own the game pass"
+end)
