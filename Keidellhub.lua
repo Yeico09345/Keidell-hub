@@ -1,4 +1,4 @@
--- Keidell Hub - Chilli Completo
+-- Keidell Hub - Chilli Style UI y Funciones
 
 local player = game.Players.LocalPlayer
 
@@ -38,19 +38,19 @@ spawn(function()
     end
 end)
 
--- Frame principal
+-- Frame principal (más compacto y colorido)
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 360, 0, 370)
-frame.Position = UDim2.new(0.5, -180, 0.5, -185)
-frame.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
-frame.BackgroundTransparency = 0.1
+frame.Size = UDim2.new(0, 340, 0, 420)
+frame.Position = UDim2.new(0.5, -170, 0.5, -210)
+frame.BackgroundColor3 = Color3.fromRGB(35, 35, 55)
+frame.BackgroundTransparency = 0.07
 frame.BorderSizePixel = 0
 frame.ZIndex = 1
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 18)
 
 -- Imagen Riyo
 local riyo = Instance.new("ImageLabel", frame)
-riyo.Size = UDim2.new(0, 60, 0, 60)
+riyo.Size = UDim2.new(0, 50, 0, 50)
 riyo.Position = UDim2.new(0, 15, 0, 15)
 riyo.BackgroundTransparency = 1
 riyo.Image = "rbxassetid://13781894238"
@@ -58,25 +58,37 @@ riyo.ZIndex = 2
 
 -- Título
 local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, -80, 0, 40)
-title.Position = UDim2.new(0, 80, 0, 15)
+title.Size = UDim2.new(1, -80, 0, 36)
+title.Position = UDim2.new(0, 75, 0, 18)
 title.BackgroundTransparency = 1
-title.Text = "Keidell Hub - Chilli Completo"
-title.TextColor3 = Color3.fromRGB(255,255,255)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 24
+title.Text = "Keidell Hub"
+title.TextColor3 = Color3.fromRGB(255, 90, 90)
+title.Font = Enum.Font.GothamBlack
+title.TextSize = 26
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.ZIndex = 2
 
+-- Subtítulo
+local subtitle = Instance.new("TextLabel", frame)
+subtitle.Size = UDim2.new(1, -80, 0, 20)
+subtitle.Position = UDim2.new(0, 75, 0, 50)
+subtitle.BackgroundTransparency = 1
+subtitle.Text = "Chilli Style"
+subtitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+subtitle.Font = Enum.Font.Gotham
+subtitle.TextSize = 16
+subtitle.TextXAlignment = Enum.TextXAlignment.Left
+subtitle.ZIndex = 2
+
 -- Output
 local output = Instance.new("TextLabel", frame)
-output.Size = UDim2.new(1, -30, 0, 70)
-output.Position = UDim2.new(0, 15, 0, 80)
-output.BackgroundTransparency = 0.4
+output.Size = UDim2.new(1, -30, 0, 38)
+output.Position = UDim2.new(0, 15, 0, 75)
+output.BackgroundTransparency = 0.25
 output.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
 output.TextColor3 = Color3.fromRGB(220,220,220)
 output.Font = Enum.Font.Gotham
-output.TextSize = 16
+output.TextSize = 15
 output.Text = "Listo."
 output.TextWrapped = true
 output.TextYAlignment = Enum.TextYAlignment.Top
@@ -99,7 +111,6 @@ end
 
 -- Auto Steal Brainroot
 local autoSteal = false
-local autoStealBtn
 local function auto_steal_brainroot()
     while autoSteal do
         for _, v in pairs(game.Players:GetPlayers()) do
@@ -116,96 +127,35 @@ local function auto_steal_brainroot()
     end
 end
 
-autoStealBtn = Instance.new("TextButton", frame)
-autoStealBtn.Size = UDim2.new(0, 300, 0, 32)
-autoStealBtn.Position = UDim2.new(0, 30, 0, 170)
-autoStealBtn.BackgroundColor3 = Color3.fromRGB(120, 60, 80)
-autoStealBtn.Text = "Auto Steal Brainroot [OFF]"
-autoStealBtn.TextColor3 = Color3.fromRGB(255,255,255)
-autoStealBtn.Font = Enum.Font.GothamBold
-autoStealBtn.TextSize = 16
-Instance.new("UICorner", autoStealBtn).CornerRadius = UDim.new(0, 8)
-autoStealBtn.MouseButton1Click:Connect(function()
+local y = 120
+local function makeButton(text, color, callback)
+    local btn = Instance.new("TextButton", frame)
+    btn.Size = UDim2.new(0, 310, 0, 34)
+    btn.Position = UDim2.new(0, 15, 0, y)
+    btn.BackgroundColor3 = color
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 16
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
+    btn.MouseButton1Click:Connect(callback)
+    y = y + 40
+    return btn
+end
+
+-- Botones
+makeButton("Auto Steal Brainroot [OFF]", Color3.fromRGB(120, 60, 80), function()
     autoSteal = not autoSteal
-    autoStealBtn.Text = "Auto Steal Brainroot ["..(autoSteal and "ON" or "OFF").."]"
+    script.Parent.Text = "Auto Steal Brainroot ["..(autoSteal and "ON" or "OFF").."]"
     if autoSteal then
         spawn(auto_steal_brainroot)
     end
 end)
 
--- TP Base
-local function teleport_base()
-    local myTeam = player.Team
-    for _, v in pairs(workspace:GetChildren()) do
-        if v.Name == "Base" and v:FindFirstChild("Team") and v.Team.Value == myTeam then
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                player.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0,5,0)
-                output.Text = "Teletransportado a tu base."
-                return
-            end
-        end
-    end
-    output.Text = "No se encontró tu base."
-end
+makeButton("TP a tu base", Color3.fromRGB(60, 120, 80), teleport_base)
+makeButton("TP a Brainroot", Color3.fromRGB(80, 80, 120), teleport_brainroot)
 
-local tpBaseBtn = Instance.new("TextButton", frame)
-tpBaseBtn.Size = UDim2.new(0, 300, 0, 32)
-tpBaseBtn.Position = UDim2.new(0, 30, 0, 210)
-tpBaseBtn.BackgroundColor3 = Color3.fromRGB(60, 120, 80)
-tpBaseBtn.Text = "TP a tu base"
-tpBaseBtn.TextColor3 = Color3.fromRGB(255,255,255)
-tpBaseBtn.Font = Enum.Font.GothamBold
-tpBaseBtn.TextSize = 16
-Instance.new("UICorner", tpBaseBtn).CornerRadius = UDim.new(0, 8)
-tpBaseBtn.MouseButton1Click:Connect(teleport_base)
-
--- TP Brainroot
-local function teleport_brainroot()
-    for _, v in pairs(workspace:GetDescendants()) do
-        if v.Name == "Brainroot" and v:IsA("BasePart") then
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                player.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0,3,0)
-                output.Text = "Teletransportado a brainroot."
-                return
-            end
-        end
-    end
-    output.Text = "No se encontró brainroot."
-end
-
-local tpBrainrootBtn = Instance.new("TextButton", frame)
-tpBrainrootBtn.Size = UDim2.new(0, 300, 0, 32)
-tpBrainrootBtn.Position = UDim2.new(0, 30, 0, 250)
-tpBrainrootBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 120)
-tpBrainrootBtn.Text = "TP a Brainroot"
-tpBrainrootBtn.TextColor3 = Color3.fromRGB(255,255,255)
-tpBrainrootBtn.Font = Enum.Font.GothamBold
-tpBrainrootBtn.TextSize = 16
-Instance.new("UICorner", tpBrainrootBtn).CornerRadius = UDim.new(0, 8)
-tpBrainrootBtn.MouseButton1Click:Connect(teleport_brainroot)
-
--- TP a jugador
-local function teleport_player(targetName)
-    for _, v in pairs(game.Players:GetPlayers()) do
-        if v.Name:lower():sub(1, #targetName) == targetName:lower() and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-            player.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,3,0)
-            output.Text = "Teletransportado a "..v.Name
-            return
-        end
-    end
-    output.Text = "Jugador no encontrado."
-end
-
-local tpPlayerBtn = Instance.new("TextButton", frame)
-tpPlayerBtn.Size = UDim2.new(0, 300, 0, 32)
-tpPlayerBtn.Position = UDim2.new(0, 30, 0, 290)
-tpPlayerBtn.BackgroundColor3 = Color3.fromRGB(120, 120, 60)
-tpPlayerBtn.Text = "TP a Jugador (escribe nombre en consola)"
-tpPlayerBtn.TextColor3 = Color3.fromRGB(255,255,255)
-tpPlayerBtn.Font = Enum.Font.GothamBold
-tpPlayerBtn.TextSize = 16
-Instance.new("UICorner", tpPlayerBtn).CornerRadius = UDim.new(0, 8)
-tpPlayerBtn.MouseButton1Click:Connect(function()
+local tpPlayerBtn = makeButton("TP a Jugador (escribe nombre en consola)", Color3.fromRGB(120, 120, 60), function()
     output.Text = "Escribe el nombre del jugador en la consola (print) y ejecuta: _G.tp('nombre')"
     _G.tp = teleport_player
 end)
