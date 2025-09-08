@@ -18,18 +18,6 @@ local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 12)
 corner.Parent = frame
 
--- Title Label
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -20, 0, 40)
-title.Position = UDim2.new(0, 10, 0, 0)
-title.BackgroundTransparency = 1
-title.Text = "🔒 Unlock Lorem Script"
-title.Font = Enum.Font.GothamBold
-title.TextSize = 18
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextXAlignment = Enum.TextXAlignment.Center
-title.Parent = frame
-
 -- Button
 local button = Instance.new("TextButton")
 button.Size = UDim2.new(0, 200, 0, 45)
