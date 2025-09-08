@@ -62,11 +62,11 @@ errorLabel.Parent = frame
 button.MouseButton1Click:Connect(function()
     -- Copy link to clipboard
     setclipboard("https://www.roblox.com/game-pass/1427391312/Unlock-Script")
-    
+
     -- Change button appearance
     button.BackgroundColor3 = Color3.fromRGB(0, 200, 0) -- green
     button.Text = "Link Copied 🔑"
-    
+
     -- Show red error
     errorLabel.Text = "You don’t own the game pass"
 end)
