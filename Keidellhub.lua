@@ -13,7 +13,7 @@ local Window = Rayfield:CreateWindow({
         Invite = "your-discord-invite-code", -- Reemplaza con un código de invitación válido
         RememberJoins = true
     },
-    KeySystem = true,
+    KeySystem = false,
     KeySettings = {
         Title = "Keal hub key",
         Subtitle = "WhatsApp",
