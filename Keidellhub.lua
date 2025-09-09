@@ -6,6 +6,8 @@ end)
 if not success then
     warn("Failed to load Rayfield: " .. Rayfield)
     return
+else
+    print("Rayfield loaded successfully")
 end
 
 -- === Circle Toggle Button (visible & draggable) ===
@@ -65,6 +67,7 @@ local function createCircleButton()
 end
 
 local CircleButton = createCircleButton()
+print("Circle button created successfully")
 
 $-- === Hub ===$
 local Window = Rayfield:CreateWindow({
@@ -81,6 +84,8 @@ local hubVisible = false
 $-- === Tabs / Section ===$
 local MainTab = Window:CreateTab("🤓Home", nil)
 local MainSection = MainTab:CreateSection("Levitation")
+
+print("Tab and section created successfully")
 
 -- === Levitation Logic ===
 local Player = game:GetService("Players").LocalPlayer
