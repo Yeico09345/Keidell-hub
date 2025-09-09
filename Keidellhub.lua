@@ -28,6 +28,42 @@ local Window = Rayfield:CreateWindow({
 local MainTab = Window:CreateTab("🤓Home", nil) -- Title, Image
 local MainSection = MainTab:CreateSection("Help") -- The 2nd argument is to tell if its only a Title and doesnt contain elements
 
+Rayfield:Notify({
+	Title = "tocaste el boton",
+	Content = "capo",
+	Duration = 3, -- Duration of the notification   
+	Image = nil,
+	Actions = { -- Notification Buttons
+		Ignore = {
+			Name = "Okay!",
+			Callback = function()
+				print("The user tapped Okay!")
+			end
+		},
+	},
+})
+
+local Button = MainSection:CreateButton({
+   Name = "infinity jump",
+   Info = "Button info/Description.", -- Speaks for itself, Remove if none.
+   Interact = 'Changable',
+   Callback = function()
+   local plr = game:GetService('Players').LocalPlayer
+	local m = plr:GetMouse()
+	m.KeyDown:connect(function(k)
+		if _G.infinjump then
+			if k:byte() == 32 then
+			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+			humanoid:ChangeState('Jumping')
+			wait()
+			humanoid:ChangeState('Seated')
+			end
+		end
+	end)
+end
+   end,
+})
+
 -- Ajustes adicionales para minimizar la detección
 Rayfield:DisableDefaultKeybinds()
 Rayfield:SetTheme("Dark")
