@@ -1,3 +1,4 @@
+-- Load Rayfield
 local success, Rayfield = pcall(function()
     return loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 end)
@@ -9,7 +10,7 @@ else
     print("Rayfield loaded successfully")
 end
 
--- === Circle Button First ===
+-- === Circle Button ===
 local function createCircleButton()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "CircleToggleUI"
@@ -18,13 +19,13 @@ local function createCircleButton()
 
     local Button = Instance.new("ImageButton")
     Button.Size = UDim2.new(0, 60, 0, 60)
-    Button.Position = UDim2.new(0, 50, 0.8, 0) -- left-bottom
+    Button.Position = UDim2.new(0, 50, 0.8, 0)
     Button.BackgroundTransparency = 1
-    Button.Image = "rbxassetid://3570695787" -- round asset
-    Button.ImageColor3 = Color3.fromRGB(200, 50, 255) -- brainrot purple
+    Button.Image = "rbxassetid://3570695787" -- circle
+    Button.ImageColor3 = Color3.fromRGB(200, 50, 255) -- purple
     Button.Parent = ScreenGui
 
-    -- Make it draggable
+    -- Draggable logic
     local dragging, dragInput, startPos, startInput
     Button.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -58,7 +59,7 @@ end
 
 local CircleButton = createCircleButton()
 
--- === Create Hub (hidden at first) ===
+-- === Create Hub ===
 local Window = Rayfield:CreateWindow({
     Name = "Steal a brainroot",
     LoadingTitle = "Rayfield Interface Suite",
@@ -85,10 +86,11 @@ local Window = Rayfield:CreateWindow({
     }
 })
 
--- Hide UI at the start
+-- Hide at start
 Rayfield:ToggleUI(false)
+local hubVisible = false
 
--- === Tabs and Infinite Jump ===
+-- === Tabs + Infinite Jump ===
 local MainTab = Window:CreateTab("🤓Home", nil)
 local MainSection = MainTab:CreateSection("Help")
 
@@ -96,16 +98,17 @@ _G.infinjump = false
 local Player = game:GetService("Players").LocalPlayer
 local UIS = game:GetService("UserInputService")
 
-local function setupHumanoid()
+local function getHumanoid()
     local char = Player.Character or Player.CharacterAdded:Wait()
     return char:WaitForChild("Humanoid")
 end
 
-local Humanoid = setupHumanoid()
+local Humanoid = getHumanoid()
 Player.CharacterAdded:Connect(function()
-    Humanoid = setupHumanoid()
+    Humanoid = getHumanoid()
 end)
 
+-- Infinite jump action
 UIS.JumpRequest:Connect(function()
     if _G.infinjump and Humanoid and Humanoid.Health > 0 then
         Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
@@ -125,8 +128,7 @@ local Button = MainTab:CreateButton({
 })
 
 -- === Circle toggles hub ===
-local visible = false
 CircleButton.MouseButton1Click:Connect(function()
-    visible = not visible
-    Rayfield:ToggleUI(visible)
+    hubVisible = not hubVisible
+    Rayfield:ToggleUI(hubVisible)
 end)
