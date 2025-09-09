@@ -87,3 +87,19 @@ local Button = MainSection:CreateButton({
 })
 
 print("Button created successfully")
+
+-- Notify the user that the script has been executed
+Rayfield:Notify({
+    Title = "Script Executed",
+    Content = "Welcome to Keidell hub",
+    Duration = 5,
+    Image = nil,
+    Actions = { -- Notification Buttons
+        Ignore = {
+            Name = "Okay!",
+            Callback = function()
+                print("The user tapped Okay!")
+            end
+        },
+    },
+})
