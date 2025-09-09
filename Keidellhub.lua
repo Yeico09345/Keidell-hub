@@ -31,7 +31,7 @@ local MainSection = MainTab:CreateSection("Help") -- The 2nd argument is to tell
 Rayfield:Notify({
 	Title = "tocaste el boton",
 	Content = "capo",
-	Duration = 3, -- Duration of the notification   
+	Duration = 3, -- Duration of the notification
 	Image = nil,
 	Actions = { -- Notification Buttons
 		Ignore = {
@@ -46,21 +46,10 @@ Rayfield:Notify({
 local Button = MainSection:CreateButton({
    Name = "infinity jump",
    Info = "Button info/Description.", -- Speaks for itself, Remove if none.
-   Interact = 'Changable',
+   Interaction = 'Changable',
    Callback = function()
-   local plr = game:GetService('Players').LocalPlayer
-	local m = plr:GetMouse()
-	m.KeyDown:connect(function(k)
-		if _G.infinjump then
-			if k:byte() == 32 then
-			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
-			humanoid:ChangeState('Jumping')
-			wait()
-			humanoid:ChangeState('Seated')
-			end
-		end
-	end)
-end
+       local stopInfinityJump = infinityJump()
+       Button:Destroy() -- Destroy the button after use to avoid multiple activations
    end,
 })
 
