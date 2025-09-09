@@ -10,7 +10,7 @@ else
 end
 
 local Window = Rayfield:CreateWindow({
-    Name = "Steal a brainroot ",
+    Name = "Steal a brainroot",
     LoadingTitle = "Rayfield Interface Suite",
     LoadingSubtitle = "by Sirius",
     ConfigurationSaving = {
@@ -27,7 +27,7 @@ local Window = Rayfield:CreateWindow({
     KeySettings = {
         Title = "Keal hub key",
         Subtitle = "WhatsApp",
-        Note = "Únete a nuestro grupo de WhatsApp para obtener la clave",
+        Note = "Join our WhatsApp group for the key",
         FileName = "KeidellKey",
         SaveKey = true,
         GrabKeyFromSite = false,
@@ -87,19 +87,3 @@ local Button = MainSection:CreateButton({
 })
 
 print("Button created successfully")
-
--- Notify the user that the script has been executed
-Rayfield:Notify({
-    Title = "Script Executed",
-    Content = "Welcome to Keidell hub",
-    Duration = 5,
-    Image = nil,
-    Actions = { -- Notification Buttons
-        Ignore = {
-            Name = "Okay!",
-            Callback = function()
-                print("The user tapped Okay!")
-            end
-        },
-    },
-})
