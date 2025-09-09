@@ -45,27 +45,29 @@ local Button = MainSection:CreateButton({
    Info = "Button info/Description.",
    Interaction = 'Changable',
    Callback = function()
-      local function infinityJump()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
+      --Toggles the infinite jump between on or off on every script run
+_G.infinjump = not _G.infinjump
 
-    local function onJumpRequest(input, gameProcessed)
-        if not gameProcessed then
-            humanoid:ChangeState("Jumping")
-            wait(0.1)
-            humanoid:ChangeState("Seated")
-        end
-        return Enum.ContextActionResult.Pass
-    end
+if _G.infinJumpStarted == nil then
+	--Ensures this only runs once to save resources
+	_G.infinJumpStarted = true
+	
+	--Notifies readiness
+	game.StarterGui:SetCore("SendNotification", {Title="WeAreDevs.net"; Text="The WeAreDevs Infinite Jump exploit is ready!"; Duration=5;})
 
-    local jumpRequestConnection = game:GetService("UserInputService").JumpRequest:Connect(onJumpRequest)
-
-    return function()
-        jumpRequestConnection:Disconnect()
-    end
+	--The actual infinite jump
+	local plr = game:GetService('Players').LocalPlayer
+	local m = plr:GetMouse()
+	m.KeyDown:connect(function(k)
+		if _G.infinjump then
+			if k:byte() == 32 then
+			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+			humanoid:ChangeState('Jumping')
+			wait()
+			humanoid:ChangeState('Seated')
+			end
+		end
+	end)
 end
-   end,
+   end
 })
-
-print("Button created successfully")
