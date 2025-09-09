@@ -8,25 +8,26 @@ if not success then
     return
 end
 
--- === Circle Toggle Button ===
+-- === Circle Toggle Button (visible & draggable) ===
 local function createCircleButton()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "CircleToggleUI"
     ScreenGui.ResetOnSpawn = false
+    ScreenGui.IgnoreGuiInset = true
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     ScreenGui.Parent = game:GetService("CoreGui")
 
     local Button = Instance.new("ImageButton")
     Button.Size = UDim2.new(0, 60, 0, 60)
     Button.Position = UDim2.new(0, 50, 0.8, 0)
     Button.BackgroundTransparency = 1
-    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- put your decal ID here
+    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- Replace with your uploaded circle image
+    Button.ZIndex = 10
+    Button.Parent = ScreenGui
 
-    -- Make it perfectly circular
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(1,0)
     corner.Parent = Button
-
-    Button.Parent = ScreenGui
 
     -- Draggable logic for mobile
     local dragging, dragInput, startPos, startInput
@@ -77,11 +78,11 @@ local Window = Rayfield:CreateWindow({
 Rayfield:ToggleUI(false)
 local hubVisible = false
 
--- === Tabs ===
+-- === Tabs / Section ===
 local MainTab = Window:CreateTab("🤓Home", nil)
 local MainSection = MainTab:CreateSection("Levitation")
 
--- === Levitation ===
+-- === Levitation Logic ===
 local Player = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
 
@@ -115,7 +116,7 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- Mobile buttons
+-- === Mobile Buttons (Up / Down / Toggle) ===
 local function createMobileButton(name, pos, color)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 80, 0, 80)
@@ -129,6 +130,7 @@ local function createMobileButton(name, pos, color)
     btn.BackgroundTransparency = 0.2
     btn.Active = true
     btn.Draggable = true
+    btn.ZIndex = 10
     return btn
 end
 
@@ -154,7 +156,7 @@ toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
 
--- Hub button
+-- === Hub Button ===
 local Button = MainTab:CreateButton({
    Name = "Toggle Levitation",
    Callback = function()
@@ -162,7 +164,7 @@ local Button = MainTab:CreateButton({
    end
 })
 
--- Circle toggle for hub
+-- === Circle toggles hub visibility ===
 CircleButton.MouseButton1Click:Connect(function()
     hubVisible = not hubVisible
     Rayfield:ToggleUI(hubVisible)
