@@ -40,6 +40,21 @@ print("Window created successfully")
 local MainTab = Window:CreateTab("🤓Home", nil)
 local MainSection = MainTab:CreateSection("Help")
 
+Rayfield:notify({
+    title="you executed the script!",
+    content="Welcome to Keidell hub",
+    duration=5,
+    image=nil,
+    actions={ -- Notification Buttons
+        Ignore = {
+            name = "Okay!",
+            callback = function()
+                print("The user tapped Okay!")
+            end
+        },
+    },
+})
+
 local Button = MainSection:CreateButton({
    Name = "infinity jump",
    Callback = function()
