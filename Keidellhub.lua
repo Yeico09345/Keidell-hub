@@ -21,6 +21,6 @@ local Window = Rayfield:CreateWindow({
         FileName = "KeidellKey",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = "your-actual-key" -- Replace with the actual key
+        Key = "Keidell" -- Replace with the actual key
     }
 })
