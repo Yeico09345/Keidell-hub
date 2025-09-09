@@ -5,6 +5,8 @@ end)
 if not success then
     warn("Failed to load Rayfield: " .. Rayfield)
     return
+else
+    print("Rayfield loaded successfully")
 end
 
 local Window = Rayfield:CreateWindow({
@@ -13,12 +15,12 @@ local Window = Rayfield:CreateWindow({
     LoadingSubtitle = "by Sirius",
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "KeidellHub", -- Asegúrate de que este nombre de carpeta sea correcto
+        FolderName = "KeidellHub",
         FileName = "Keidell hub"
     },
     Discord = {
         Enabled = false,
-        Invite = "your-discord-invite-code", -- Reemplaza con un código de invitación válido
+        Invite = "your-discord-invite-code",
         RememberJoins = true
     },
     KeySystem = false,
@@ -29,27 +31,16 @@ local Window = Rayfield:CreateWindow({
         FileName = "KeidellKey",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = "0" -- Reemplaza con la clave real
+        Key = "0"
     }
 })
 
-local MainTab = Window:CreateTab("🤓Home", nil) -- Title, Image
-local MainSection = MainTab:CreateSection("Help") -- The 2nd argument is to tell if its only a Title and doesnt contain elements
+print("Window created successfully")
 
-Rayfield:Notify({
-	Title = "tocaste el boton",
-	Content = "capo",
-	Duration = 3, -- Duration of the notification
-	Image = nil,
-	Actions = { -- Notification Buttons
-		Ignore = {
-			Name = "Okay!",
-			Callback = function()
-				print("The user tapped Okay!")
-			end
-		},
-	},
-})
+local MainTab = Window:CreateTab("🤓Home", nil)
+local MainSection = MainTab:CreateSection("Help")
+
+print("Tab and section created successfully")
 
 local function infinityJump()
     local player = game.Players.LocalPlayer
@@ -74,33 +65,12 @@ end
 
 local Button = MainSection:CreateButton({
    Name = "infinity jump",
-   Info = "Button info/Description.", -- Speaks for itself, Remove if none.
+   Info = "Button info/Description.",
    Interaction = 'Changable',
    Callback = function()
-       local plr = game:GetService('Players').LocalPlayer
-	local m = plr:GetMouse()
-	m.KeyDown:connect(function(k)
-		if _G.infinjump then
-			if k:byte() == 32 then
-			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
-			humanoid:ChangeState('Jumping')
-			wait()
-			humanoid:ChangeState('Seated')
-			end
-		end
-	end)
-end
+       local stopInfinityJump = infinityJump()
+       Button:Destroy() -- Destroy the button after use to avoid multiple activations
    end,
 })
 
--- Ajustes adicionales para minimizar la detección
-Rayfield:DisableDefaultKeybinds()
-Rayfield:SetTheme("Dark")
-
--- Inyectar el script en un hilo secundario
-spawn(function()
-    while true do
-        -- Tu código aquí
-        wait(5) -- Ajusta este valor para cambiar la frecuencia de ejecución
-    end
-end)
+print("Button created successfully")
