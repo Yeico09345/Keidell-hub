@@ -77,8 +77,19 @@ local Button = MainSection:CreateButton({
    Info = "Button info/Description.", -- Speaks for itself, Remove if none.
    Interaction = 'Changable',
    Callback = function()
-       local stopInfinityJump = infinityJump()
-       Button:Destroy() -- Destroy the button after use to avoid multiple activations
+       local plr = game:GetService('Players').LocalPlayer
+	local m = plr:GetMouse()
+	m.KeyDown:connect(function(k)
+		if _G.infinjump then
+			if k:byte() == 32 then
+			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+			humanoid:ChangeState('Jumping')
+			wait()
+			humanoid:ChangeState('Seated')
+			end
+		end
+	end)
+end
    end,
 })
 
