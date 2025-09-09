@@ -63,7 +63,7 @@ local function infinityJump()
     end
 end
 
-local Button = MainSection:CreateButton({
+local Button = MainTab:CreateButton({
    Name = "infinity jump",
    Callback = function()
       -- Toggles the infinite jump between on or off on every script run
