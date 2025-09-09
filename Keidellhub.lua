@@ -67,5 +67,5 @@ if _G.infinJumpStarted == nil then
 		end
 	end)
 end
-   end
+   end,
 })
