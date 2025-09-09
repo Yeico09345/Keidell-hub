@@ -42,18 +42,31 @@ local MainSection = MainTab:CreateSection("Help")
 
 print("Tab and section created successfully")
 
--- === Infinite Jump Core (safe, no ragdoll) ===
+-- === Bug-Free Infinite Jump ===
 _G.infinjump = false
-local UIS = game:GetService("UserInputService")
 local Player = game:GetService("Players").LocalPlayer
+local UIS = game:GetService("UserInputService")
 
+local function setupHumanoid()
+    local char = Player.Character or Player.CharacterAdded:Wait()
+    return char:WaitForChild("Humanoid")
+end
+
+local Humanoid = setupHumanoid()
+
+-- Refresh humanoid when respawning
+Player.CharacterAdded:Connect(function()
+    Humanoid = setupHumanoid()
+end)
+
+-- Jump logic
 UIS.JumpRequest:Connect(function()
-    if _G.infinjump and Player.Character and Player.Character:FindFirstChildOfClass("Humanoid") then
-        Player.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+    if _G.infinjump and Humanoid then
+        Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
     end
 end)
 
--- Button for Infinite Jump
+-- Rayfield Button
 local Button = MainTab:CreateButton({
    Name = "Toggle Infinite Jump",
    Callback = function()
@@ -68,7 +81,7 @@ local Button = MainTab:CreateButton({
 
 print("Button created successfully")
 
--- Circle Minimize Button (outside Rayfield)
+-- === Circle Minimize Button ===
 local function createCircleButton()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "CircleToggleUI"
@@ -77,12 +90,13 @@ local function createCircleButton()
 
     local Button = Instance.new("ImageButton")
     Button.Size = UDim2.new(0, 60, 0, 60)
-    Button.Position = UDim2.new(0, 50, 0.8, 0) -- left side, lower area
+    Button.Position = UDim2.new(0, 50, 0.8, 0) -- left side of screen
     Button.BackgroundTransparency = 1
-    Button.Image = "rbxassetid://3570695787" -- round UI asset
+    Button.Image = "rbxassetid://3570695787" -- round asset
     Button.ImageColor3 = Color3.fromRGB(60, 120, 255)
     Button.Parent = ScreenGui
 
+    -- Dragging
     local dragging, dragInput, startPos, startInput
     Button.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -121,7 +135,7 @@ end
 
 createCircleButton()
 
--- Notify the user that the script has been executed
+-- Notify user
 Rayfield:Notify({
     Title = "Script Executed",
     Content = "Welcome to Keidell hub",
