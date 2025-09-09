@@ -40,9 +40,12 @@ print("Window created successfully")
 local MainTab = Window:CreateTab("🤓Home", nil)
 local MainSection = MainTab:CreateSection("Help")
 
-print("Tab and section created successfully")
-
-local function infinityJump()
+local Button = MainSection:CreateButton({
+   Name = "infinity jump",
+   Info = "Button info/Description.",
+   Interaction = 'Changable',
+   Callback = function()
+      local function infinityJump()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid")
@@ -62,14 +65,6 @@ local function infinityJump()
         jumpRequestConnection:Disconnect()
     end
 end
-
-local Button = MainSection:CreateButton({
-   Name = "infinity jump",
-   Info = "Button info/Description.",
-   Interaction = 'Changable',
-   Callback = function()
-       local stopInfinityJump = infinityJump()
-       Button:Destroy() -- Destroy the button after use to avoid multiple activations
    end,
 })
 
