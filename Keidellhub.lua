@@ -66,7 +66,7 @@ end
 
 local CircleButton = createCircleButton()
 
--- === Hub ===
+$-- === Hub ===$
 local Window = Rayfield:CreateWindow({
     Name = "Steal a brainroot",
     LoadingTitle = "Rayfield",
@@ -78,7 +78,7 @@ local Window = Rayfield:CreateWindow({
 Rayfield:ToggleUI(false)
 local hubVisible = false
 
--- === Tabs / Section ===
+$-- === Tabs / Section ===$
 local MainTab = Window:CreateTab("🤓Home", nil)
 local MainSection = MainTab:CreateSection("Levitation")
 
@@ -156,7 +156,7 @@ toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
 
--- === Hub Button ===
+$-- === Hub Button ===$
 local Button = MainTab:CreateButton({
    Name = "Toggle Levitation",
    Callback = function()
