@@ -1,4 +1,12 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local success, Rayfield = pcall(function()
+    return loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+end)
+
+if not success then
+    warn("Failed to load Rayfield: " .. Rayfield)
+    return
+end
+
 local Window = Rayfield:CreateWindow({
     Name = "Steal a brainroot ",
     LoadingTitle = "Rayfield Interface Suite",
@@ -42,6 +50,27 @@ Rayfield:Notify({
 		},
 	},
 })
+
+local function infinityJump()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+
+    local function onJumpRequest(input, gameProcessed)
+        if not gameProcessed then
+            humanoid:ChangeState("Jumping")
+            wait(0.1)
+            humanoid:ChangeState("Seated")
+        end
+        return Enum.ContextActionResult.Pass
+    end
+
+    local jumpRequestConnection = game:GetService("UserInputService").JumpRequest:Connect(onJumpRequest)
+
+    return function()
+        jumpRequestConnection:Disconnect()
+    end
+end
 
 local Button = MainSection:CreateButton({
    Name = "infinity jump",
