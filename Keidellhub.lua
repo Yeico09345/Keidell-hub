@@ -37,5 +37,5 @@ spawn(function()
     end
 end)
 
-local MaainTab = Window:CreateTab("🤓Home", nil) -- Title, Image
-local Help Player= Tab:CreateSection("Section Example",true/false) -- The 2nd argument is to tell if its only a Title and doesnt contain elements
+local MainTab = Window:CreateTab("🤓Home", nil) -- Title, Image
+local HelpSection = MainTab:CreateSection("Help") -- The 2nd argument is to tell if its only a Title and doesnt contain elements
