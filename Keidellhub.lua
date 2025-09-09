@@ -42,35 +42,28 @@ local MainSection = MainTab:CreateSection("Help")
 
 print("Tab and section created successfully")
 
--- Fixed Infinite Jump
-local function enableInfiniteJump()
-    local UserInputService = game:GetService("UserInputService")
-    local player = game.Players.LocalPlayer
-    local humanoid = player.Character:WaitForChild("Humanoid")
+-- === Infinite Jump Core ===
+_G.infinjump = false
+local UIS = game:GetService("UserInputService")
+local Player = game:GetService("Players").LocalPlayer
 
-    UserInputService.JumpRequest:Connect(function()
-        if _G.infinjump then
-            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-        end
-    end)
-end
+UIS.JumpRequest:Connect(function()
+    if _G.infinjump and Player.Character and Player.Character:FindFirstChildOfClass("Humanoid") then
+        Player.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end)
 
+-- Button for Infinite Jump
 local Button = MainTab:CreateButton({
-   Name = "infinity jump",
+   Name = "Toggle Infinite Jump",
    Callback = function()
       _G.infinjump = not _G.infinjump
 
-      if _G.infinJumpStarted == nil then
-          _G.infinJumpStarted = true
-
-          game:GetService("StarterGui"):SetCore("SendNotification", {
-              Title = "Keidell Hub",
-              Text = "Infinite Jump Ready!",
-              Duration = 5
-          })
-
-          enableInfiniteJump()
-      end
+      game:GetService("StarterGui"):SetCore("SendNotification", {
+          Title = "Infinite Jump",
+          Text = _G.infinjump and "Enabled" or "Disabled",
+          Duration = 3
+      })
    end
 })
 
