@@ -5,22 +5,26 @@ local Window = Rayfield:CreateWindow({
     LoadingSubtitle = "by Sirius",
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "KeidellHub", -- Specify a custom folder name
+        FolderName = "KeidellHub", -- Asegúrate de que este nombre de carpeta sea correcto
         FileName = "Keidell hub"
     },
     Discord = {
         Enabled = false,
-        Invite = "your-discord-invite-code", -- Replace with a valid invite code
+        Invite = "your-discord-invite-code", -- Reemplaza con un código de invitación válido
         RememberJoins = true
     },
     KeySystem = true,
     KeySettings = {
-        Title = "Keidell hub key",
+        Title = "Keal hub key",
         Subtitle = "WhatsApp",
-        Note = "Join our WhatsApp group for the key",
+        Note = "Únete a nuestro grupo de WhatsApp para obtener la clave",
         FileName = "KeidellKey",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = "Keidell" -- Replace with the actual key
+        Key = "Keidell" -- Reemplaza con la clave real
     }
 })
+
+-- Ajustes adicionales para minimizar la detección
+Rayfield:DisableDefaultKeybinds()
+Rayfield:SetTheme("Dark")
