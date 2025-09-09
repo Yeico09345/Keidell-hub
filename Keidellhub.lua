@@ -25,6 +25,9 @@ local Window = Rayfield:CreateWindow({
     }
 })
 
+local MainTab = Window:CreateTab("🤓Home", nil) -- Title, Image
+local MainSection = MainTab:CreateSection("Help") -- The 2nd argument is to tell if its only a Title and doesnt contain elements
+
 -- Ajustes adicionales para minimizar la detección
 Rayfield:DisableDefaultKeybinds()
 Rayfield:SetTheme("Dark")
@@ -36,6 +39,3 @@ spawn(function()
         wait(5) -- Ajusta este valor para cambiar la frecuencia de ejecución
     end
 end)
-
-local MainTab = Window:CreateTab("🤓Home", nil) -- Title, Image
-local HelpSection = MainTab:CreateSection("Help") -- The 2nd argument is to tell if its only a Title and doesnt contain elements
