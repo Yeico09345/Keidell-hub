@@ -51,7 +51,7 @@ local function infinityJump()
         if not gameProcessed and input.KeyCode == Enum.KeyCode.Space then
             humanoid:ChangeState("Jumping")
             wait(0.1)
-            humanoid:ChangeState("Seated")
+            hummanoid:ChangeState("Seated")
         end
         return Enum.ContextActionResult.Pass
     end
@@ -63,7 +63,7 @@ local function infinityJump()
     end
 end
 
-local Button = MainSection:CreateButton({
+local Button = MainTab:CreateButton({
    Name = "infinity jump",
    Callback = function()
       -- Toggles the infinite jump between on or off on every script run
