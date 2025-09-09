@@ -63,7 +63,7 @@ local function infinityJump()
     end
 end
 
-local Button = MainTab:CreateButton({
+local Button = MainSection:CreateButton({
    Name = "infinity jump",
    Callback = function()
       -- Toggles the infinite jump between on or off on every script run
@@ -87,3 +87,19 @@ local Button = MainTab:CreateButton({
 })
 
 print("Button created successfully")
+
+-- Notify the user that the script has been executed
+Rayfield:Notify({
+    Title = "Script Executed",
+    Content = "Welcome to Keidell hub",
+    Duration = 5,
+    Image = nil,
+    Actions = { -- Notification Buttons
+        Ignore = {
+            Name = "Okay!",
+            Callback = function()
+                print("The user tapped Okay!")
+            end
+        },
+    },
+})
