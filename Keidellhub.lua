@@ -1,28 +1,12 @@
--- 📥 Load OrionLib
-local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
-print("OrionLib cargado:", OrionLib ~= nil)
+-- 📥 Cargar Rayfield
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
--- 🌌 Create main window
-local Window = OrionLib:MakeWindow({
-    Name = "Steal a Brainroot",
-    HidePremium = true,
-    SaveConfig = true,
-    ConfigFolder = "KeidellHub"
-})
-
--- 📑 Create tab
-local MainTab = Window:MakeTab({
-    Name = "Home",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
-
--- 👤 Player & RunService
 local Player = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("User InputService")
+local Workspace = game:GetService("Workspace")
 
--- 🪂 Levitation
+-- Variables para levitación
 local flying = false
 local speed = 50
 local bodyVelocity
@@ -37,7 +21,6 @@ local function startFlying()
     bodyVelocity.MaxForce = Vector3.new(0, 1e5, 0)
     bodyVelocity.Velocity = Vector3.new(0, 0, 0)
     bodyVelocity.Parent = hrp
-    print("Levitation started")
 end
 
 local function stopFlying()
@@ -46,7 +29,6 @@ local function stopFlying()
         bodyVelocity:Destroy()
         bodyVelocity = nil
     end
-    print("Levitation stopped")
 end
 
 RunService.Heartbeat:Connect(function()
@@ -55,61 +37,85 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- 🔘 Levitation Button
-MainTab:AddButton({
-    Name = "Toggle Levitation",
-    Callback = function()
-        if flying then stopFlying() else startFlying() end
+-- Crear ventana
+local Window = Rayfield:CreateWindow({
+    Name = "Steal a Brainroot",
+    LoadingTitle = "Cargando...",
+    LoadingSubtitle = "Por favor espera",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "KeidellHub",
+        FileName = "Config"
+    },
+    Discord = {
+        Enabled = false,
+    },
+    KeySystem = false
+})
+
+local MainTab = Window:CreateTab("Home", 4483345998)
+
+-- Levitation toggle
+MainTab:CreateToggle({
+    Name = "Levitation",
+    CurrentValue = false,
+    Flag = "LevitationToggle",
+    Callback = function(value)
+        if value then
+            startFlying()
+        else
+            stopFlying()
+        end
     end
 })
 
--- 🔁 Infinite Jump
-MainTab:AddToggle({
+-- Infinite Jump toggle
+local infJumpConnection
+MainTab:CreateToggle({
     Name = "Infinite Jump",
-    Default = false,
+    CurrentValue = false,
+    Flag = "InfiniteJumpToggle",
     Callback = function(value)
         if value then
-            _G.InfJump = UserInputService.JumpRequest:Connect(function()
+            infJumpConnection = UserInputService.JumpRequest:Connect(function()
                 local humanoid = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
                 if humanoid then
                     humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
                 end
             end)
-            print("Infinite Jump enabled")
         else
-            if _G.InfJump then
-                _G.InfJump:Disconnect()
-                _G.InfJump = nil
-                print("Infinite Jump disabled")
+            if infJumpConnection then
+                infJumpConnection:Disconnect()
+                infJumpConnection = nil
             end
         end
     end
 })
 
--- 🛡️ Anti Damage
-MainTab:AddToggle({
+-- Anti Damage toggle
+local antiDamageConnection
+MainTab:CreateToggle({
     Name = "Anti Damage",
-    Default = false,
+    CurrentValue = false,
+    Flag = "AntiDamageToggle",
     Callback = function(value)
         local char = Player.Character or Player.CharacterAdded:Wait()
         local humanoid = char:WaitForChild("Humanoid")
         if value then
-            _G.AntiDamage = humanoid.HealthChanged:Connect(function()
+            antiDamageConnection = humanoid.HealthChanged:Connect(function()
                 humanoid.Health = humanoid.MaxHealth
             end)
-            print("Anti Damage enabled")
         else
-            if _G.AntiDamage then
-                _G.AntiDamage:Disconnect()
-                _G.AntiDamage = nil
-                print("Anti Damage disabled")
+            if antiDamageConnection then
+                antiDamageConnection:Disconnect()
+                antiDamageConnection = nil
             end
         end
     end
 })
 
--- 👀 ESP Players
-MainTab:AddButton({
+-- ESP Players button
+MainTab:CreateButton({
     Name = "ESP Players",
     Callback = function()
         for _, plr in pairs(game.Players:GetPlayers()) do
@@ -123,15 +129,14 @@ MainTab:AddButton({
                 end
             end
         end
-        print("ESP Players enabled")
     end
 })
 
--- 🏠 ESP Bases
-MainTab:AddButton({
+-- ESP Bases button
+MainTab:CreateButton({
     Name = "ESP Bases",
     Callback = function()
-        for _, base in pairs(workspace:GetChildren()) do
+        for _, base in pairs(Workspace:GetChildren()) do
             if base:IsA("Model") and base:FindFirstChild("HumanoidRootPart") then
                 if not base:FindFirstChild("Highlight") then
                     local highlight = Instance.new("Highlight")
@@ -142,11 +147,10 @@ MainTab:AddButton({
                 end
             end
         end
-        print("ESP Bases enabled")
     end
 })
 
--- 📱 Mobile Buttons
+-- Botones móviles
 local function createMobileButton(name, pos, color)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 80, 0, 80)
@@ -186,7 +190,7 @@ toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
 
--- 🔘 Circular Button to Toggle Hub
+-- Botón circular para toggle ventana
 local function createCircleButton()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "CircleToggleUI"
@@ -241,6 +245,9 @@ end
 
 local CircleButton = createCircleButton()
 CircleButton.MouseButton1Click:Connect(function()
-    print("Toggle ventana")
-    Window:Toggle()
+    if Window.Visible then
+        Window:Hide()
+    else
+        Window:Show()
+    end
 end)
