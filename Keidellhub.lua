@@ -10,7 +10,7 @@ else
     print("Rayfield loaded successfully")
 end
 
--- === Circle Toggle Button (visible & draggable) ===
+-- Create a circle button that is visible and draggable
 local function createCircleButton()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "CircleToggleUI"
@@ -69,7 +69,7 @@ end
 local CircleButton = createCircleButton()
 print("Circle button created successfully")
 
-$-- === Hub ===$
+-- Create the main hub window
 local Window = Rayfield:CreateWindow({
     Name = "Steal a brainroot",
     LoadingTitle = "Rayfield",
@@ -81,13 +81,13 @@ local Window = Rayfield:CreateWindow({
 Rayfield:ToggleUI(false)
 local hubVisible = false
 
-$-- === Tabs / Section ===$
+-- Create the main tab and section
 local MainTab = Window:CreateTab("🤓Home", nil)
 local MainSection = MainTab:CreateSection("Levitation")
 
 print("Tab and section created successfully")
 
--- === Levitation Logic ===
+-- Levitation logic
 local Player = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
 
@@ -121,7 +121,7 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- === Mobile Buttons (Up / Down / Toggle) ===
+-- Create mobile buttons for up, down, and toggle
 local function createMobileButton(name, pos, color)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 80, 0, 80)
@@ -161,7 +161,7 @@ toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
 
-$-- === Hub Button ===$
+-- Create a button in the hub to toggle levitation
 local Button = MainTab:CreateButton({
    Name = "Toggle Levitation",
    Callback = function()
@@ -169,7 +169,7 @@ local Button = MainTab:CreateButton({
    end
 })
 
--- === Circle toggles hub visibility ===
+-- Circle button toggles hub visibility
 CircleButton.MouseButton1Click:Connect(function()
     hubVisible = not hubVisible
     Rayfield:ToggleUI(hubVisible)
