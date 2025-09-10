@@ -1,96 +1,20 @@
--- ⚡ Forzar Rayfield a usar PlayerGui
-getgenv().RayfieldConfiguration = {
-    Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-}
+-- 📥 Cargar OrionLib
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
 
--- 📥 Cargar Rayfield desde mirror shlexware
-local success, Rayfield = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source"))()
-end)
-
-if not success or not Rayfield then
-    warn("❌ No se pudo cargar Rayfield desde mirror shlexware")
-    return
-else
-    print("✅ Rayfield cargado correctamente desde mirror shlexware")
-end
-
--- 🎛️ Botón circular (toggle hub)
-local function createCircleButton()
-    local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "CircleToggleUI"
-    ScreenGui.ResetOnSpawn = false
-    ScreenGui.IgnoreGuiInset = true
-    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-    local Button = Instance.new("ImageButton")
-    Button.Size = UDim2.new(0, 60, 0, 60)
-    Button.Position = UDim2.new(0, 50, 0.8, 0)
-    Button.BackgroundTransparency = 1
-    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- tu imagen
-    Button.ZIndex = 10
-    Button.Parent = ScreenGui
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(1, 0)
-    corner.Parent = Button
-
-    -- Draggable móvil
-    local dragging, dragInput, startPos, startInput
-    Button.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            startPos = Button.Position
-            startInput = input
-        end
-    end)
-
-    Button.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            dragInput = input
-        end
-    end)
-
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if input == dragInput and dragging then
-            local delta = input.Position - startInput.Position
-            Button.Position = UDim2.new(
-                startPos.X.Scale, startPos.X.Offset + delta.X,
-                startPos.Y.Scale, startPos.Y.Offset + delta.Y
-            )
-        end
-    end)
-
-    Button.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            dragging = false
-        end
-    end)
-
-    return Button
-end
-
-local CircleButton = createCircleButton()
-print("Circle button creado ✅")
-
--- 🌌 Ventana principal
-local Window = Rayfield:CreateWindow({
+-- 🌌 Crear ventana principal
+local Window = OrionLib:MakeWindow({
     Name = "Steal a Brainroot",
-    LoadingTitle = "Rayfield",
-    LoadingSubtitle = "Mobile Ready",
-    ConfigurationSaving = {Enabled = true, FolderName = "KeidellHub", FileName = "Keidell hub"},
-    KeySystem = false,
+    HidePremium = true,
+    SaveConfig = true,
+    ConfigFolder = "KeidellHub"
 })
 
-Rayfield:ToggleUI(false)
-local hubVisible = false
-
--- 📑 Tabs
-local MainTab = Window:CreateTab("🤓Home", nil)
-local MoveSection = MainTab:CreateSection("🌀 Movimiento")
-local ProtectSection = MainTab:CreateSection("🛡️ Protección")
-local VisualSection = MainTab:CreateSection("👁️ Visuales")
+-- 📑 Crear tab
+local MainTab = Window:MakeTab({
+    Name = "Home",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
 
 -- 👤 Player & RunService
 local Player = game:GetService("Players").LocalPlayer
@@ -127,18 +51,18 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- 🪂 Botón Levitación
-MainTab:CreateButton({
-   Name = "Toggle Levitation",
-   Callback = function()
-      if flying then stopFlying() else startFlying() end
-   end
+-- 🔘 Botón de levitación
+MainTab:AddButton({
+    Name = "Toggle Levitation",
+    Callback = function()
+        if flying then stopFlying() else startFlying() end
+    end
 })
 
 -- 🔁 Infinite Jump
-MainTab:CreateToggle({
+MainTab:AddToggle({
     Name = "Infinite Jump",
-    CurrentValue = false,
+    Default = false,
     Callback = function(value)
         local UIS = game:GetService("UserInputService")
         if value then
@@ -158,9 +82,9 @@ MainTab:CreateToggle({
 })
 
 -- 🛡️ Anti Damage
-MainTab:CreateToggle({
+MainTab:AddToggle({
     Name = "Anti Daño",
-    CurrentValue = false,
+    Default = false,
     Callback = function(value)
         local char = Player.Character or Player.CharacterAdded:Wait()
         local humanoid = char:WaitForChild("Humanoid")
@@ -178,7 +102,7 @@ MainTab:CreateToggle({
 })
 
 -- 👀 ESP Jugadores
-MainTab:CreateButton({
+MainTab:AddButton({
     Name = "ESP Jugadores",
     Callback = function()
         for _, plr in pairs(game.Players:GetPlayers()) do
@@ -196,7 +120,7 @@ MainTab:CreateButton({
 })
 
 -- 🏠 ESP Bases
-MainTab:CreateButton({
+MainTab:AddButton({
     Name = "ESP Bases",
     Callback = function()
         for _, base in pairs(workspace:GetChildren()) do
@@ -213,7 +137,7 @@ MainTab:CreateButton({
     end
 })
 
--- 📱 Botones móviles (⬆️ ⬇️ ⚡)
+-- 📱 Botones móviles
 local function createMobileButton(name, pos, color)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 80, 0, 80)
@@ -223,7 +147,7 @@ local function createMobileButton(name, pos, color)
     btn.TextScaled = true
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Font = Enum.Font.SourceSansBold
-    btn.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    btn.Parent = Player:WaitForChild("PlayerGui")
     btn.BackgroundTransparency = 0.2
     btn.Active = true
     btn.Draggable = true
@@ -253,8 +177,60 @@ toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
 
--- 🔘 Toggle Hub con el botón circular
+-- 🔘 Botón circular toggle hub
+local function createCircleButton()
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "CircleToggleUI"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.IgnoreGuiInset = true
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    ScreenGui.Parent = Player:WaitForChild("PlayerGui")
+
+    local Button = Instance.new("ImageButton")
+    Button.Size = UDim2.new(0, 60, 0, 60)
+    Button.Position = UDim2.new(0, 50, 0.8, 0)
+    Button.BackgroundTransparency = 1
+    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- tu imagen
+    Button.ZIndex = 10
+    Button.Parent = ScreenGui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1, 0)
+    corner.Parent = Button
+
+    -- Draggable móvil
+    local dragging, dragInput, startPos, startInput
+    Button.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            startPos = Button.Position
+            startInput = input
+        end
+    end)
+    Button.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            local delta = input.Position - startInput.Position
+            Button.Position = UDim2.new(
+                startPos.X.Scale, startPos.X.Offset + delta.X,
+                startPos.Y.Scale, startPos.Y.Offset + delta.Y
+            )
+        end
+    end)
+    Button.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+        end
+    end)
+
+    return Button
+end
+
+local CircleButton = createCircleButton()
 CircleButton.MouseButton1Click:Connect(function()
-    hubVisible = not hubVisible
-    Rayfield:ToggleUI(hubVisible)
+    Window:Toggle()
 end)
