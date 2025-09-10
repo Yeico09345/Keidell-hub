@@ -1,7 +1,7 @@
--- 📥 Cargar OrionLib
+-- 📥 Load OrionLib
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
 
--- 🌌 Crear ventana principal
+-- 🌌 Create main window
 local Window = OrionLib:MakeWindow({
     Name = "Steal a Brainroot",
     HidePremium = true,
@@ -9,7 +9,7 @@ local Window = OrionLib:MakeWindow({
     ConfigFolder = "KeidellHub"
 })
 
--- 📑 Crear tab
+-- 📑 Create tab
 local MainTab = Window:MakeTab({
     Name = "Home",
     Icon = "rbxassetid://4483345998",
@@ -51,7 +51,7 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- 🔘 Botón de levitación
+-- 🔘 Levitation Button
 MainTab:AddButton({
     Name = "Toggle Levitation",
     Callback = function()
@@ -83,7 +83,7 @@ MainTab:AddToggle({
 
 -- 🛡️ Anti Damage
 MainTab:AddToggle({
-    Name = "Anti Daño",
+    Name = "Anti Damage",
     Default = false,
     Callback = function(value)
         local char = Player.Character or Player.CharacterAdded:Wait()
@@ -101,9 +101,9 @@ MainTab:AddToggle({
     end
 })
 
--- 👀 ESP Jugadores
+-- 👀 ESP Players
 MainTab:AddButton({
-    Name = "ESP Jugadores",
+    Name = "ESP Players",
     Callback = function()
         for _, plr in pairs(game.Players:GetPlayers()) do
             if plr ~= Player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
@@ -137,7 +137,7 @@ MainTab:AddButton({
     end
 })
 
--- 📱 Botones móviles
+-- 📱 Mobile Buttons
 local function createMobileButton(name, pos, color)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 80, 0, 80)
@@ -177,7 +177,7 @@ toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
 
--- 🔘 Botón circular toggle hub
+-- 🔘 Circular Button to Toggle Hub
 local function createCircleButton()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "CircleToggleUI"
@@ -190,7 +190,7 @@ local function createCircleButton()
     Button.Size = UDim2.new(0, 60, 0, 60)
     Button.Position = UDim2.new(0, 50, 0.8, 0)
     Button.BackgroundTransparency = 1
-    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- tu imagen
+    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- Replace with your uploaded circle image
     Button.ZIndex = 10
     Button.Parent = ScreenGui
 
@@ -198,7 +198,7 @@ local function createCircleButton()
     corner.CornerRadius = UDim.new(1, 0)
     corner.Parent = Button
 
-    -- Draggable móvil
+    -- Draggable for mobile
     local dragging, dragInput, startPos, startInput
     Button.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.Touch then
