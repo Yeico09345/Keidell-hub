@@ -1,5 +1,14 @@
 -- 📥 Load OrionLib
-local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+local success, OrionLib = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+end)
+
+if not success then
+    warn("Failed to load OrionLib: " .. OrionLib)
+    return
+else
+    print("OrionLib loaded successfully")
+end
 
 -- 🌌 Create main window
 local Window = OrionLib:MakeWindow({
@@ -9,12 +18,16 @@ local Window = OrionLib:MakeWindow({
     ConfigFolder = "KeidellHub"
 })
 
+print("Main window created successfully")
+
 -- 📑 Create tab
 local MainTab = Window:MakeTab({
     Name = "Home",
     Icon = "rbxassetid://4483345998",
     PremiumOnly = false
 })
+
+print("Tab created successfully")
 
 -- 👤 Player & RunService
 local Player = game:GetService("Players").LocalPlayer
@@ -59,6 +72,8 @@ MainTab:AddButton({
     end
 })
 
+print("Levitation button added successfully")
+
 -- 🔁 Infinite Jump
 MainTab:AddToggle({
     Name = "Infinite Jump",
@@ -81,6 +96,8 @@ MainTab:AddToggle({
     end
 })
 
+print("Infinite Jump toggle added successfully")
+
 -- 🛡️ Anti Damage
 MainTab:AddToggle({
     Name = "Anti Damage",
@@ -101,6 +118,8 @@ MainTab:AddToggle({
     end
 })
 
+print("Anti Damage toggle added successfully")
+
 -- 👀 ESP Players
 MainTab:AddButton({
     Name = "ESP Players",
@@ -119,6 +138,8 @@ MainTab:AddButton({
     end
 })
 
+print("ESP Players button added successfully")
+
 -- 🏠 ESP Bases
 MainTab:AddButton({
     Name = "ESP Bases",
@@ -136,6 +157,8 @@ MainTab:AddButton({
         end
     end
 })
+
+print("ESP Bases button added successfully")
 
 -- 📱 Mobile Buttons
 local function createMobileButton(name, pos, color)
@@ -176,6 +199,8 @@ end)
 toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
+
+print("Mobile buttons created successfully")
 
 -- 🔘 Circular Button to Toggle Hub
 local function createCircleButton()
@@ -234,3 +259,5 @@ local CircleButton = createCircleButton()
 CircleButton.MouseButton1Click:Connect(function()
     Window:Toggle()
 end)
+
+print("Circular button created successfully")
