@@ -81,10 +81,8 @@ local Window = Rayfield:CreateWindow({
 Rayfield:ToggleUI(false)
 local hubVisible = false
 
--- Tabs
+-- Tabs and Sections
 local MainTab = Window:CreateTab("🤓Home", nil)
-
--- Sections
 local MoveSection = MainTab:CreateSection("🌀 Movimiento")
 local ProtectSection = MainTab:CreateSection("🛡️ Protección")
 local VisualSection = MainTab:CreateSection("👁️ Visuales")
