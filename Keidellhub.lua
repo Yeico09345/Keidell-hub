@@ -1,14 +1,6 @@
 -- 📥 Load OrionLib
-local success, OrionLib = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
-end)
-
-if not success then
-    warn("Failed to load OrionLib: " .. OrionLib)
-    return
-else
-    print("OrionLib loaded successfully")
-end
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+print("OrionLib cargado:", OrionLib ~= nil)
 
 -- 🌌 Create main window
 local Window = OrionLib:MakeWindow({
@@ -18,8 +10,6 @@ local Window = OrionLib:MakeWindow({
     ConfigFolder = "KeidellHub"
 })
 
-print("Main window created successfully")
-
 -- 📑 Create tab
 local MainTab = Window:MakeTab({
     Name = "Home",
@@ -27,11 +17,10 @@ local MainTab = Window:MakeTab({
     PremiumOnly = false
 })
 
-print("Tab created successfully")
-
 -- 👤 Player & RunService
 local Player = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("User InputService")
 
 -- 🪂 Levitation
 local flying = false
@@ -46,8 +35,9 @@ local function startFlying()
 
     bodyVelocity = Instance.new("BodyVelocity")
     bodyVelocity.MaxForce = Vector3.new(0, 1e5, 0)
-    bodyVelocity.Velocity = Vector3.zero
+    bodyVelocity.Velocity = Vector3.new(0, 0, 0)
     bodyVelocity.Parent = hrp
+    print("Levitation started")
 end
 
 local function stopFlying()
@@ -56,11 +46,12 @@ local function stopFlying()
         bodyVelocity:Destroy()
         bodyVelocity = nil
     end
+    print("Levitation stopped")
 end
 
 RunService.Heartbeat:Connect(function()
     if flying and bodyVelocity then
-        bodyVelocity.Velocity = Vector3.zero
+        bodyVelocity.Velocity = Vector3.new(0, 0, 0)
     end
 end)
 
@@ -72,31 +63,28 @@ MainTab:AddButton({
     end
 })
 
-print("Levitation button added successfully")
-
 -- 🔁 Infinite Jump
 MainTab:AddToggle({
     Name = "Infinite Jump",
     Default = false,
     Callback = function(value)
-        local UIS = game:GetService("UserInputService")
         if value then
-            _G.InfJump = UIS.JumpRequest:Connect(function()
+            _G.InfJump = UserInputService.JumpRequest:Connect(function()
                 local humanoid = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
                 if humanoid then
-                    humanoid:ChangeState("Jumping")
+                    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
                 end
             end)
+            print("Infinite Jump enabled")
         else
             if _G.InfJump then
                 _G.InfJump:Disconnect()
                 _G.InfJump = nil
+                print("Infinite Jump disabled")
             end
         end
     end
 })
-
-print("Infinite Jump toggle added successfully")
 
 -- 🛡️ Anti Damage
 MainTab:AddToggle({
@@ -109,16 +97,16 @@ MainTab:AddToggle({
             _G.AntiDamage = humanoid.HealthChanged:Connect(function()
                 humanoid.Health = humanoid.MaxHealth
             end)
+            print("Anti Damage enabled")
         else
             if _G.AntiDamage then
                 _G.AntiDamage:Disconnect()
                 _G.AntiDamage = nil
+                print("Anti Damage disabled")
             end
         end
     end
 })
-
-print("Anti Damage toggle added successfully")
 
 -- 👀 ESP Players
 MainTab:AddButton({
@@ -135,10 +123,9 @@ MainTab:AddButton({
                 end
             end
         end
+        print("ESP Players enabled")
     end
 })
-
-print("ESP Players button added successfully")
 
 -- 🏠 ESP Bases
 MainTab:AddButton({
@@ -155,10 +142,9 @@ MainTab:AddButton({
                 end
             end
         end
+        print("ESP Bases enabled")
     end
 })
-
-print("ESP Bases button added successfully")
 
 -- 📱 Mobile Buttons
 local function createMobileButton(name, pos, color)
@@ -186,21 +172,19 @@ upBtn.MouseButton1Down:Connect(function()
     if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.new(0, speed, 0) end
 end)
 upBtn.MouseButton1Up:Connect(function()
-    if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.zero end
+    if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.new(0, 0, 0) end
 end)
 
 downBtn.MouseButton1Down:Connect(function()
     if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.new(0, -speed, 0) end
 end)
 downBtn.MouseButton1Up:Connect(function()
-    if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.zero end
+    if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.new(0, 0, 0) end
 end)
 
 toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
-
-print("Mobile buttons created successfully")
 
 -- 🔘 Circular Button to Toggle Hub
 local function createCircleButton()
@@ -215,7 +199,7 @@ local function createCircleButton()
     Button.Size = UDim2.new(0, 60, 0, 60)
     Button.Position = UDim2.new(0, 50, 0.8, 0)
     Button.BackgroundTransparency = 1
-    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- Replace with your uploaded circle image
+    Button.Image = "rbxassetid://6023426915" -- Imagen circular genérica
     Button.ZIndex = 10
     Button.Parent = ScreenGui
 
@@ -223,7 +207,7 @@ local function createCircleButton()
     corner.CornerRadius = UDim.new(1, 0)
     corner.Parent = Button
 
-    -- Draggable for mobile
+    -- Draggable para móvil
     local dragging, dragInput, startPos, startInput
     Button.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.Touch then
@@ -237,7 +221,7 @@ local function createCircleButton()
             dragInput = input
         end
     end)
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
+    UserInputService.InputChanged:Connect(function(input)
         if input == dragInput and dragging then
             local delta = input.Position - startInput.Position
             Button.Position = UDim2.new(
@@ -257,7 +241,6 @@ end
 
 local CircleButton = createCircleButton()
 CircleButton.MouseButton1Click:Connect(function()
+    print("Toggle ventana")
     Window:Toggle()
 end)
-
-print("Circular button created successfully")
