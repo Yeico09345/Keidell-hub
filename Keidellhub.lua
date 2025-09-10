@@ -10,7 +10,7 @@ else
     print("Rayfield loaded successfully")
 end
 
--- Create a circle button that is visible and draggable
+-- Create Circle Button
 local function createCircleButton()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "CircleToggleUI"
@@ -23,7 +23,7 @@ local function createCircleButton()
     Button.Size = UDim2.new(0, 60, 0, 60)
     Button.Position = UDim2.new(0, 50, 0.8, 0)
     Button.BackgroundTransparency = 1
-    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- Replace with your uploaded circle image
+    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- Reemplaza con tu imagen circular
     Button.ZIndex = 10
     Button.Parent = ScreenGui
 
@@ -31,7 +31,7 @@ local function createCircleButton()
     corner.CornerRadius = UDim.new(1,0)
     corner.Parent = Button
 
-    -- Draggable logic for mobile
+    -- Draggable mobile
     local dragging, dragInput, startPos, startInput
     Button.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.Touch then
@@ -69,9 +69,9 @@ end
 local CircleButton = createCircleButton()
 print("Circle button created successfully")
 
--- Create the main hub window
+-- Main Hub
 local Window = Rayfield:CreateWindow({
-    Name = "Steal a brainroot",
+    Name = "Steal a Brainroot",
     LoadingTitle = "Rayfield",
     LoadingSubtitle = "Mobile Ready",
     ConfigurationSaving = {Enabled = true, FolderName = "KeidellHub", FileName = "Keidell hub"},
@@ -81,16 +81,19 @@ local Window = Rayfield:CreateWindow({
 Rayfield:ToggleUI(false)
 local hubVisible = false
 
--- Create the main tab and section
+-- Tabs
 local MainTab = Window:CreateTab("🤓Home", nil)
-local MainSection = MainTab:CreateSection("Levitation")
 
-print("Tab and section created successfully")
+-- Sections
+local MoveSection = MainTab:CreateSection("🌀 Movimiento")
+local ProtectSection = MainTab:CreateSection("🛡️ Protección")
+local VisualSection = MainTab:CreateSection("👁️ Visuales")
 
--- Levitation logic
+-- Player & RunService
 local Player = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
 
+-- Levitation
 local flying = false
 local speed = 50
 local bodyVelocity
@@ -121,7 +124,93 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- Create mobile buttons for up, down, and toggle
+-- Levitation Button
+MainTab:CreateButton({
+   Name = "Toggle Levitation",
+   Callback = function()
+      if flying then stopFlying() else startFlying() end
+   end
+})
+
+-- Infinite Jump
+MainTab:CreateToggle({
+    Name = "Infinite Jump",
+    CurrentValue = false,
+    Callback = function(value)
+        local UIS = game:GetService("UserInputService")
+        if value then
+            _G.InfJump = UIS.JumpRequest:Connect(function()
+                local humanoid = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid:ChangeState("Jumping")
+                end
+            end)
+        else
+            if _G.InfJump then
+                _G.InfJump:Disconnect()
+                _G.InfJump = nil
+            end
+        end
+    end
+})
+
+-- Anti Damage
+MainTab:CreateToggle({
+    Name = "Anti Daño",
+    CurrentValue = false,
+    Callback = function(value)
+        local char = Player.Character or Player.CharacterAdded:Wait()
+        local humanoid = char:WaitForChild("Humanoid")
+        if value then
+            _G.AntiDamage = humanoid.HealthChanged:Connect(function()
+                humanoid.Health = humanoid.MaxHealth
+            end)
+        else
+            if _G.AntiDamage then
+                _G.AntiDamage:Disconnect()
+                _G.AntiDamage = nil
+            end
+        end
+    end
+})
+
+-- ESP Jugadores
+MainTab:CreateButton({
+    Name = "ESP Jugadores",
+    Callback = function()
+        for _,plr in pairs(game.Players:GetPlayers()) do
+            if plr ~= Player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                if not plr.Character:FindFirstChild("Highlight") then
+                    local highlight = Instance.new("Highlight")
+                    highlight.FillColor = Color3.fromRGB(255,0,0)
+                    highlight.OutlineColor = Color3.fromRGB(255,255,255)
+                    highlight.Adornee = plr.Character
+                    highlight.Parent = plr.Character
+                end
+            end
+        end
+    end
+})
+
+-- ESP Bases
+MainTab:CreateButton({
+    Name = "ESP Bases",
+    Callback = function()
+        for _,base in pairs(workspace:GetChildren()) do
+            if base:IsA("Model") and base:FindFirstChild("HumanoidRootPart") then
+                if not base:FindFirstChild("Highlight") then
+                    local highlight = Instance.new("Highlight")
+                    highlight.FillColor = Color3.fromRGB(0,255,0)
+                    highlight.OutlineColor = Color3.fromRGB(255,255,255)
+                    highlight.Adornee = base
+                    highlight.Parent = base
+                end
+            end
+        end
+    end
+})
+
+-- Mobile Buttons (⬆️ ⬇️ ⚡)
 local function createMobileButton(name, pos, color)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 80, 0, 80)
@@ -161,15 +250,7 @@ toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
 
--- Create a button in the hub to toggle levitation
-local Button = MainTab:CreateButton({
-   Name = "Toggle Levitation",
-   Callback = function()
-      if flying then stopFlying() else startFlying() end
-   end
-})
-
--- Circle button toggles hub visibility
+-- Toggle Hub with Circle
 CircleButton.MouseButton1Click:Connect(function()
     hubVisible = not hubVisible
     Rayfield:ToggleUI(hubVisible)
