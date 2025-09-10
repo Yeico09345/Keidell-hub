@@ -23,15 +23,15 @@ local function createCircleButton()
     Button.Size = UDim2.new(0, 60, 0, 60)
     Button.Position = UDim2.new(0, 50, 0.8, 0)
     Button.BackgroundTransparency = 1
-    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- Reemplaza con tu imagen circular
+    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- Replace with your uploaded circle image
     Button.ZIndex = 10
     Button.Parent = ScreenGui
 
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(1,0)
+    corner.CornerRadius = UDim.new(1, 0)
     corner.Parent = Button
 
-    -- Draggable mobile
+    -- Draggable logic for mobile
     local dragging, dragInput, startPos, startInput
     Button.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.Touch then
@@ -178,12 +178,12 @@ MainTab:CreateToggle({
 MainTab:CreateButton({
     Name = "ESP Jugadores",
     Callback = function()
-        for _,plr in pairs(game.Players:GetPlayers()) do
+        for _, plr in pairs(game.Players:GetPlayers()) do
             if plr ~= Player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
                 if not plr.Character:FindFirstChild("Highlight") then
                     local highlight = Instance.new("Highlight")
-                    highlight.FillColor = Color3.fromRGB(255,0,0)
-                    highlight.OutlineColor = Color3.fromRGB(255,255,255)
+                    highlight.FillColor = Color3.fromRGB(255, 0, 0)
+                    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
                     highlight.Adornee = plr.Character
                     highlight.Parent = plr.Character
                 end
@@ -196,12 +196,12 @@ MainTab:CreateButton({
 MainTab:CreateButton({
     Name = "ESP Bases",
     Callback = function()
-        for _,base in pairs(workspace:GetChildren()) do
+        for _, base in pairs(workspace:GetChildren()) do
             if base:IsA("Model") and base:FindFirstChild("HumanoidRootPart") then
                 if not base:FindFirstChild("Highlight") then
                     local highlight = Instance.new("Highlight")
-                    highlight.FillColor = Color3.fromRGB(0,255,0)
-                    highlight.OutlineColor = Color3.fromRGB(255,255,255)
+                    highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
                     highlight.Adornee = base
                     highlight.Parent = base
                 end
@@ -218,7 +218,7 @@ local function createMobileButton(name, pos, color)
     btn.BackgroundColor3 = color
     btn.Text = name
     btn.TextScaled = true
-    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Font = Enum.Font.SourceSansBold
     btn.Parent = game:GetService("CoreGui")
     btn.BackgroundTransparency = 0.2
@@ -228,19 +228,19 @@ local function createMobileButton(name, pos, color)
     return btn
 end
 
-local upBtn = createMobileButton("⬆️", UDim2.new(0.85,0,0.6,0), Color3.fromRGB(50,200,50))
-local downBtn = createMobileButton("⬇️", UDim2.new(0.85,0,0.75,0), Color3.fromRGB(50,50,200))
-local toggleBtn = createMobileButton("⚡", UDim2.new(0.7,0,0.7,0), Color3.fromRGB(200,50,50))
+local upBtn = createMobileButton("⬆️", UDim2.new(0.85, 0, 0.6, 0), Color3.fromRGB(50, 200, 50))
+local downBtn = createMobileButton("⬇️", UDim2.new(0.85, 0, 0.75, 0), Color3.fromRGB(50, 50, 200))
+local toggleBtn = createMobileButton("⚡", UDim2.new(0.7, 0, 0.7, 0), Color3.fromRGB(200, 50, 50))
 
 upBtn.MouseButton1Down:Connect(function()
-    if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.new(0,speed,0) end
+    if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.new(0, speed, 0) end
 end)
 upBtn.MouseButton1Up:Connect(function()
     if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.zero end
 end)
 
 downBtn.MouseButton1Down:Connect(function()
-    if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.new(0,-speed,0) end
+    if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.new(0, -speed, 0) end
 end)
 downBtn.MouseButton1Up:Connect(function()
     if flying and bodyVelocity then bodyVelocity.Velocity = Vector3.zero end
