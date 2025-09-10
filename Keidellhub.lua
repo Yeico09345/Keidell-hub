@@ -1,29 +1,34 @@
--- Load Rayfield
+-- ⚡ Forzar Rayfield a usar PlayerGui
+getgenv().RayfieldConfiguration = {
+    Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+}
+
+-- 📥 Cargar Rayfield desde mirror shlexware
 local success, Rayfield = pcall(function()
-    return loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source"))()
 end)
 
-if not success then
-    warn("Failed to load Rayfield: " .. Rayfield)
+if not success or not Rayfield then
+    warn("❌ No se pudo cargar Rayfield desde mirror shlexware")
     return
 else
-    print("Rayfield loaded successfully")
+    print("✅ Rayfield cargado correctamente desde mirror shlexware")
 end
 
--- Create Circle Button
+-- 🎛️ Botón circular (toggle hub)
 local function createCircleButton()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "CircleToggleUI"
     ScreenGui.ResetOnSpawn = false
     ScreenGui.IgnoreGuiInset = true
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    ScreenGui.Parent = game:GetService("CoreGui")
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
     local Button = Instance.new("ImageButton")
     Button.Size = UDim2.new(0, 60, 0, 60)
     Button.Position = UDim2.new(0, 50, 0.8, 0)
     Button.BackgroundTransparency = 1
-    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- Replace with your uploaded circle image
+    Button.Image = "rbxassetid://YOUR_IMAGE_ID" -- tu imagen
     Button.ZIndex = 10
     Button.Parent = ScreenGui
 
@@ -31,7 +36,7 @@ local function createCircleButton()
     corner.CornerRadius = UDim.new(1, 0)
     corner.Parent = Button
 
-    -- Draggable logic for mobile
+    -- Draggable móvil
     local dragging, dragInput, startPos, startInput
     Button.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.Touch then
@@ -67,9 +72,9 @@ local function createCircleButton()
 end
 
 local CircleButton = createCircleButton()
-print("Circle button created successfully")
+print("Circle button creado ✅")
 
--- Main Hub
+-- 🌌 Ventana principal
 local Window = Rayfield:CreateWindow({
     Name = "Steal a Brainroot",
     LoadingTitle = "Rayfield",
@@ -81,17 +86,17 @@ local Window = Rayfield:CreateWindow({
 Rayfield:ToggleUI(false)
 local hubVisible = false
 
--- Tabs and Sections
+-- 📑 Tabs
 local MainTab = Window:CreateTab("🤓Home", nil)
 local MoveSection = MainTab:CreateSection("🌀 Movimiento")
 local ProtectSection = MainTab:CreateSection("🛡️ Protección")
 local VisualSection = MainTab:CreateSection("👁️ Visuales")
 
--- Player & RunService
+-- 👤 Player & RunService
 local Player = game:GetService("Players").LocalPlayer
 local RunService = game:GetService("RunService")
 
--- Levitation
+-- 🪂 Levitation
 local flying = false
 local speed = 50
 local bodyVelocity
@@ -122,7 +127,7 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- Levitation Button
+-- 🪂 Botón Levitación
 MainTab:CreateButton({
    Name = "Toggle Levitation",
    Callback = function()
@@ -130,7 +135,7 @@ MainTab:CreateButton({
    end
 })
 
--- Infinite Jump
+-- 🔁 Infinite Jump
 MainTab:CreateToggle({
     Name = "Infinite Jump",
     CurrentValue = false,
@@ -152,7 +157,7 @@ MainTab:CreateToggle({
     end
 })
 
--- Anti Damage
+-- 🛡️ Anti Damage
 MainTab:CreateToggle({
     Name = "Anti Daño",
     CurrentValue = false,
@@ -172,7 +177,7 @@ MainTab:CreateToggle({
     end
 })
 
--- ESP Jugadores
+-- 👀 ESP Jugadores
 MainTab:CreateButton({
     Name = "ESP Jugadores",
     Callback = function()
@@ -190,7 +195,7 @@ MainTab:CreateButton({
     end
 })
 
--- ESP Bases
+-- 🏠 ESP Bases
 MainTab:CreateButton({
     Name = "ESP Bases",
     Callback = function()
@@ -208,7 +213,7 @@ MainTab:CreateButton({
     end
 })
 
--- Mobile Buttons (⬆️ ⬇️ ⚡)
+-- 📱 Botones móviles (⬆️ ⬇️ ⚡)
 local function createMobileButton(name, pos, color)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 80, 0, 80)
@@ -218,7 +223,7 @@ local function createMobileButton(name, pos, color)
     btn.TextScaled = true
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Font = Enum.Font.SourceSansBold
-    btn.Parent = game:GetService("CoreGui")
+    btn.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     btn.BackgroundTransparency = 0.2
     btn.Active = true
     btn.Draggable = true
@@ -248,7 +253,7 @@ toggleBtn.MouseButton1Click:Connect(function()
     if flying then stopFlying() else startFlying() end
 end)
 
--- Toggle Hub with Circle
+-- 🔘 Toggle Hub con el botón circular
 CircleButton.MouseButton1Click:Connect(function()
     hubVisible = not hubVisible
     Rayfield:ToggleUI(hubVisible)
