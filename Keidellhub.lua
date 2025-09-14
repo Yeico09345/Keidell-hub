@@ -58,22 +58,39 @@ contentFrame.Position = UDim2.new(0, 10, 0, 40)
 contentFrame.BackgroundTransparency = 1
 contentFrame.Parent = mainContainer
 
+local logoImage = Instance.new("ImageLabel")
+logoImage.Size = UDim2.new(0, 100, 0, 100)
+logoImage.Position = UDim2.new(0.5, -50, 0, 10)
+logoImage.Image = "rbxassetid://YOUR_GACHIAKUTA_LOGO_IMAGE_ID"
+logoImage.Parent = contentFrame
+
 local checkButton = Instance.new("TextButton")
 checkButton.Size = UDim2.new(1, 0, 0, 40)
-checkButton.Position = UDim2.new(0, 0, 0, 20)
+checkButton.Position = UDim2.new(0, 0, 0, 120)
 checkButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
 checkButton.BorderSizePixel = 0
-checkButton.Text = "LOAD SCRIPT"
+checkButton.Text = "REMOVE WALLS"
 checkButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 checkButton.Font = Enum.Font.GothamBold
 checkButton.TextSize = 14
 checkButton.Parent = contentFrame
 
+local teleportButton = Instance.new("TextButton")
+teleportButton.Size = UDim2.new(1, 0, 0, 40)
+teleportButton.Position = UDim2.new(0, 0, 0, 170)
+teleportButton.BackgroundColor3 = Color3.fromRGB(0, 120, 0)
+teleportButton.BorderSizePixel = 0
+teleportButton.Text = "TELEPORT TO BASE"
+teleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+teleportButton.Font = Enum.Font.GothamBold
+teleportButton.TextSize = 14
+teleportButton.Parent = contentFrame
+
 local statusLabel = Instance.new("TextLabel")
 statusLabel.Size = UDim2.new(1, 0, 0, 20)
-statusLabel.Position = UDim2.new(0, 0, 0, 70)
+statusLabel.Position = UDim2.new(0, 0, 0, 220)
 statusLabel.BackgroundTransparency = 1
-statusLabel.Text = "Status: Ready to load..."
+statusLabel.Text = "Status: Ready..."
 statusLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
 statusLabel.Font = Enum.Font.Gotham
 statusLabel.TextSize = 12
@@ -101,11 +118,40 @@ end
 local hileScriptLink = "https://pastebin.com/raw/TKv2M6YN"
 
 checkButton.MouseButton1Click:Connect(function()
-    statusLabel.Text = "Status: Loading script..."
+    statusLabel.Text = "Status: Removing walls..."
     statusLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
     wait(1)
-    loadstring(game: HttpGet(hileScriptLink))()
-    screenGui: Destroy()
+    -- Code to remove walls
+    for _, part in ipairs(workspace:GetChildren()) do
+        if part:IsA("BasePart") and part.Name ~= "Terrain" then
+            part.Transparency = 1
+            part.CanCollide = false
+        end
+    end
+    statusLabel.Text = "Status: Walls removed!"
+    statusLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+    wait(2)
+    statusLabel.Text = "Status: Ready..."
+    statusLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+end)
+
+teleportButton.MouseButton1Click:Connect(function()
+    statusLabel.Text = "Status: Teleporting to base..."
+    statusLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+    wait(1)
+    -- Code to teleport to base
+    local playerBase = workspace:FindFirstChild("PlayerBase") -- Assuming the base is named "PlayerBase"
+    if playerBase then
+        player.Character:SetPrimaryPartCFrame(playerBase.CFrame)
+        statusLabel.Text = "Status: Teleported to base!"
+        statusLabel.TextColor3 = Color3.fromRGB(0, 200, 0)
+    else
+        statusLabel.Text = "Status: Base not found!"
+        statusLabel.TextColor3 = Color3.fromRGB(200, 0, 0)
+    end
+    wait(2)
+    statusLabel.Text = "Status: Ready..."
+    statusLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
 end)
 
 closeButton.MouseButton1Click:Connect(function()
